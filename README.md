@@ -45,5 +45,11 @@ Cancel authentication and then you should get `"unable to parse authentication c
 
 You should see login page. Default username and password is admin / admin.
 
+Then you can import dashboards from this repo. You can see them below:
+
+![Grafana owerview dashboard screenshot](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/screenshot1.png)
+
+![Grafana history dashboard screenshot](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/screenshot2.png)
+
 
 
