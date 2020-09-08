@@ -1,0 +1,12 @@
+[Unit]
+Description=DC Powermeter service
+After=network-online.target
+
+[Service]
+WorkingDirectory=/usr/bin
+ExecStart=/usr/bin/python3 /usr/bin/dc_powermeter.py
+#User=kaplan
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
