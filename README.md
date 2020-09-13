@@ -19,21 +19,21 @@ git clone https://github.com/lukaskaplan/DC_powermeter
 chmod a+x ./install.sh
 sudo ./install.sh
 
-systemctl status dc_powermeter.service
+sudo systemctl status dc_powermeter.service
 ```
-# Use it as zabbix_agent script
+# Option 1) Use it as zabbix_agent script
 In this case you don't want to run it as a service and there will not be needed influx and grafana.
 After instalation, stop and disable the dc_powermeter service:
 
 ```
-systemctl stop dc_powermeter.service
-systemctl disable dc_powermeter.service
+sudo systemctl stop dc_powermeter.service
+sudo systemctl disable dc_powermeter.service
 ``` 
 
 Ensure that service is stopped and disabled:
 
 ```
-systemctl status dc_powermeter.service
+sudo systemctl status dc_powermeter.service
 ```
 
 Copy zabbix_agent config and reload zabbix_agent:
@@ -56,9 +56,14 @@ $ sudo zabbix_agentd -t dc_powermeter.current[c]
 dc_powermeter.current[c]                      [t|0.0]
 
 ```
+### Zabbix item configuration:
+
+![Zabbix item configuration](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/zabbix_item.png) 
 
 
-# How to run Influx and Grafana
+# Option 2) How to run Influx and Grafana
+In this case we want to run dc_powermeter as a service, see section "How to install it as a service" above.
+
 You will need running docker environment
 
 ```
