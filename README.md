@@ -9,7 +9,7 @@ This Device is powered by 12V DC power supply. Data are read via RS485 bus (modb
 # Connection diagram
 ![Connection diagram](https://github.com/lukaskaplan/DC_powermeter/blob/master/DC_powermeter.svg)
 
-# How to install python service
+# How to install it as a service
 You will need linux server with usb port
 
 ```
@@ -21,6 +21,42 @@ sudo ./install.sh
 
 systemctl status dc_powermeter.service
 ```
+# Use it as zabbix_agent script
+In this case you don't want to run it as a service and there will not be needed influx and grafana.
+After instalation, stop and disable the dc_powermeter service:
+
+```
+systemctl stop dc_powermeter.service
+systemctl disable dc_powermeter.service
+``` 
+
+Ensure that service is stopped and disabled:
+
+```
+systemctl status dc_powermeter.service
+```
+
+Copy zabbix_agent config and reload zabbix_agent:
+
+```
+sudo cp ./zabbix_agentd.conf.d/userparameter-dc_powermetter.conf /etc/zabbix/zabbix_agentd.conf.d/
+sudo systemctl restart zabbix-agent.service
+```
+
+Test zabbix_agent userparameter:
+
+```
+$ sudo zabbix_agentd -t dc_powermeter.current[a]
+dc_powermeter.current[a]                      [t|0.17]
+
+$ sudo zabbix_agentd -t dc_powermeter.current[b]
+dc_powermeter.current[b]                      [t|0.16]
+
+$ sudo zabbix_agentd -t dc_powermeter.current[c]
+dc_powermeter.current[c]                      [t|0.0]
+
+```
+
 
 # How to run Influx and Grafana
 You will need running docker environment

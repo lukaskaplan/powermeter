@@ -13,6 +13,7 @@
 ## Version: 1.0                                               ##
 ################################################################
 
+import sys
 import time # for sleep(interval) 
 import datetime # for influxdb timestamp
 from influxdb import InfluxDBClient
@@ -52,36 +53,50 @@ influxclient = InfluxDBClient(
     influx["dbname"]
 )
 
-# Run until you get a ctrl^c
-try:
-    while True:
-        timestamp=datetime.datetime.utcnow().isoformat()
-        request = modbusclient.read_holding_registers(address=0,count=56,unit=1)
-        #print(request.registers)
+### ONESHOT MODE ###
+if len(sys.argv) > 1:
+#    if str(sys.argv[1]) == "-oneshot":
+    request = modbusclient.read_holding_registers(address=0,count=56,unit=1)
+    for i in range(0,len(interface)):
+        current = float(ratio[interface[i]]) * request.registers[8+i]
+        current = round(current, 2)
+        if str(sys.argv[1]) == interface[i]:
+            # print(interface[i], current, "A")
+            print(current)
+            break
 
-        for i in range(0,len(interface)):
-            current = float(ratio[interface[i]]) * request.registers[8+i]
-            current = round(current, 2)
-            print(interface[i], current, "A")
-            # Create the JSON data structure
-            data = [
-            {
-              "measurement": influx["measurement"],
-                  "tags": {
-                      "interface": interface[i],
-                  },
-                  "time": timestamp,
-                  "fields": {
-                      "current" : current,
+### DAEMON MODE ###
+else:
+    # Run until you get a ctrl^c
+    try:
+        while True:
+            timestamp=datetime.datetime.utcnow().isoformat()
+            request = modbusclient.read_holding_registers(address=0,count=56,unit=1)
+            #print(request.registers)
+    
+            for i in range(0,len(interface)):
+                current = float(ratio[interface[i]]) * request.registers[8+i]
+                current = round(current, 2)
+                print(interface[i], current, "A")
+                # Create the JSON data structure
+                data = [
+                {
+                  "measurement": influx["measurement"],
+                      "tags": {
+                          "interface": interface[i],
+                      },
+                      "time": timestamp,
+                      "fields": {
+                          "current" : current,
+                      }
                   }
-              }
-            ]
-            # Send the JSON data to InfluxDB
-            influxclient.write_points(data)
-        print('---')
-
-        # Wait until it's time to query again...
-        time.sleep(int(loop["interval"]))
- 
-except KeyboardInterrupt:
-    pass
+                ]
+                # Send the JSON data to InfluxDB
+                influxclient.write_points(data)
+            print('---')
+    
+            # Wait until it's time to query again...
+            time.sleep(int(loop["interval"]))
+     
+    except KeyboardInterrupt:
+        pass
