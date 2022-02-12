@@ -1,4 +1,4 @@
-# DC_powermeter
+# powermeter
 
 This project is cheap solution for measuring of AC current on up to 16 phases. It is based on cheap chinese device labeled "HDHK", which has 16 inputs for measuring transformers.
 
