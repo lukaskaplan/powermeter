@@ -1,0 +1,15 @@
+# USE This file in case, that you are using more USR/RS485 converters. So we need to map each convertor to right ttyUSB after system reboot.
+# place it in /etc/udev/rules.d/99-usb-serial.rules
+# change "PATH" by your local conditions...
+
+# example:
+SUBSYSTEM=="tty",ENV{ID_PATH}=="pci-0000:00:12.0-usb-0:3:1.0",SYMLINK+="ttyUSBPWR1"
+SUBSYSTEM=="tty",ENV{ID_PATH}=="pci-0000:00:12.0-usb-0:4:1.0",SYMLINK+="ttyUSBPWR2"
+SUBSYSTEM=="tty",ENV{ID_PATH}=="pci-0000:00:12.0-usb-0:5:1.0",SYMLINK+="ttyUSBPWR3"
+SUBSYSTEM=="tty",ENV{ID_PATH}=="pci-0000:00:12.0-usb-0:1:1.0",SYMLINK+="ttyUSBPWR4"
+
+# Handy commands:
+# udevadm info --name=ttyUSB1
+# udevadm control --reload-rules
+# udevadm monitor
+ 
