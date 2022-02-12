@@ -39,7 +39,7 @@ sudo systemctl status dc_powermeter.service
 Copy zabbix_agent config and reload zabbix_agent:
 
 ```
-sudo cp ./zabbix_agentd.conf.d/userparameter-dc_powermetter.conf /etc/zabbix/zabbix_agentd.conf.d/
+sudo cp ./zabbix_agentd.conf.d/userparameter-powermetter.conf /etc/zabbix/zabbix_agentd.conf.d/
 sudo systemctl restart zabbix-agent.service
 ```
 
@@ -58,10 +58,55 @@ dc_powermeter.current[c]                      [t|0.0]
 ```
 ### Zabbix item configuration:
 
-![Zabbix item configuration](https://github.com/lukaskaplan/powermeter/blob/master/images/zabbix_item.png) 
+ - Name: powermeter_current_A
+ - Type: Zabbix agent
+ - Key: powermeter.current[a]
+ - Host interface: <IP address of your host>
+ - Type: Numeric(float)
+ - Units: A
 
 
-# Option 2) How to run Influx and Grafana
+  
+ # Option 2) Use it as zabbix_agent script with json
+ 
+Copy zabbix_agent config and reload zabbix_agent:
+
+```
+sudo cp ./zabbix_agentd.conf.d/userparameter-powermetter.conf /etc/zabbix/zabbix_agentd.conf.d/
+sudo systemctl restart zabbix-agent.service
+```
+
+Test zabbix_agent userparameter:
+
+```
+sudo zabbix_agentd -t dc_powermeter.json[/etc/powermeter/powermetter1.conf]
+
+powermeter.json[/etc/powermeter/powermeter1.conf] [t|{"a": 3.51, "b": 3.77, "c": 1.3, "d": 3.51, "e": 3.88, "f": 1.97, "g": 1.23, "h": 0.0, "i": 1.55, "j": 1.55, "k": 2.02, "l": 4.0, "m": 0.47, "n": 0.0, "o": 4.91, "p": 0.0}]
+```
+### Zabbix item configuration (in template):
+
+ - Name: powermeter
+ - Type: Zabbix agent
+ - Key: powermeter.json[{$PATH}]
+ - Type of information: Text
+  
+### Zabbix dependent item (in template):
+
+Item:
+  - Name: Circuit 1
+  - Type: Dependent item
+  - Key: 1a
+  - Master item: Template powermeter: powermeter
+  - Type of information: Nuimeric (float)
+  - Units: A
+  
+Preprocesing:
+  - Name: JSONPath
+  - Parameters: $.a
+
+  
+  
+# Option 3) How to run Influx and Grafana
 In this case we want to run dc_powermeter as a service, see section "How to install it as a service" above.
 
 You will need running docker environment
