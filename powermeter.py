@@ -22,7 +22,7 @@ from configparser import ConfigParser
   
 ### Read the config file ###
 config_object = ConfigParser()
-config_object.read("/etc/dc_powermeter.conf")
+config_object.read("/etc/powermeter.conf")
 influx = config_object["influx"]
 modbus = config_object["modbus"]
 ratio = config_object["ratio"]
