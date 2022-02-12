@@ -4,10 +4,10 @@ This project is cheap solution for measuring of AC current on up to 16 phases. I
 
 This Device is powered by 12V DC power supply. Data are read via RS485 bus (modbus-rtu) which can is connected to PC by RS485/USB converter. On the computer, there is running debian 10 with simple python script. Python script reds data from "HDHK" and sends them to remote InfluxDB. Then we can visualise them by Grafana.
 
-![hdhk - chinese rs485 ampermeter](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/HDHK.jpg) 
+![hdhk - chinese rs485 ampermeter](https://github.com/lukaskaplan/powermeter/blob/master/images/HDHK.jpg) 
 
 # Connection diagram
-![Connection diagram](https://github.com/lukaskaplan/DC_powermeter/blob/master/powermeter.svg)
+![Connection diagram](https://github.com/lukaskaplan/powermeter/blob/master/powermeter.svg)
 
 # How to install it as a service
 You will need linux server with usb port
@@ -15,7 +15,7 @@ You will need linux server with usb port
 ```
 mkdir dc_powermeter
 cd dc_powermeter
-git clone https://github.com/lukaskaplan/DC_powermeter
+git clone https://github.com/lukaskaplan/powermeter
 chmod a+x ./install.sh
 sudo ./install.sh
 
@@ -58,7 +58,7 @@ dc_powermeter.current[c]                      [t|0.0]
 ```
 ### Zabbix item configuration:
 
-![Zabbix item configuration](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/zabbix_item.png) 
+![Zabbix item configuration](https://github.com/lukaskaplan/powermeter/blob/master/images/zabbix_item.png) 
 
 
 # Option 2) How to run Influx and Grafana
@@ -69,7 +69,7 @@ You will need running docker environment
 ```
 mkdir /srv/dc_powermeter
 cd /srv/dc_powermeter
-git clone https://github.com/lukaskaplan/DC_powermeter
+git clone https://github.com/lukaskaplan/powermeter
 docker-compose up -d
 ```
 
@@ -88,9 +88,9 @@ You should see login page. Default username and password is admin / admin.
 
 Then you can import dashboards from this repo. You can see them below:
 
-![Grafana owerview dashboard screenshot](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/screenshot1.png)
+![Grafana owerview dashboard screenshot](https://github.com/lukaskaplan/powermeter/blob/master/images/screenshot1.png)
 
-![Grafana history dashboard screenshot](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/screenshot2.png)
+![Grafana history dashboard screenshot](https://github.com/lukaskaplan/powermeter/blob/master/images/screenshot2.png)
 
 
 
