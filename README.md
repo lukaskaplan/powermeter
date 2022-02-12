@@ -7,7 +7,7 @@ This Device is powered by 12V DC power supply. Data are read via RS485 bus (modb
 ![hdhk - chinese rs485 ampermeter](https://github.com/lukaskaplan/DC_powermeter/blob/master/images/HDHK.jpg) 
 
 # Connection diagram
-![Connection diagram](https://github.com/lukaskaplan/DC_powermeter/blob/master/DC_powermeter.svg)
+![Connection diagram](https://github.com/lukaskaplan/DC_powermeter/blob/master/powermeter.svg)
 
 # How to install it as a service
 You will need linux server with usb port
