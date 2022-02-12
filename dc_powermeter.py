@@ -1,6 +1,6 @@
 ################################################################
 ##                                                            ##
-##                       DC Powermeter                        ##
+##                       Powermeter                           ##
 ##                                                            ##
 ## Description:                                               ##
 ##     This simple script reads current values                ##
