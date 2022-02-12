@@ -103,8 +103,12 @@ Item:
 Preprocesing:
   - Name: JSONPath
   - Parameters: $.a
-
-  
+ 
+ ### Zabbix Host Macros
+ Macro:
+  - Macro: {$PATH}
+  - Value: /etc/powermeter/powermeter1.conf
+  - Description: Path to powermeter config file 
   
 # Option 3) How to run Influx and Grafana
 In this case we want to run dc_powermeter as a service, see section "How to install it as a service" above.
