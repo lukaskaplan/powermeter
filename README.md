@@ -13,27 +13,29 @@ This Device is powered by 12V DC power supply. Data are read via RS485 bus (modb
 You will need linux server with usb port
 
 ```
+apt update && apt install git
 mkdir dc_powermeter
 cd dc_powermeter
 git clone https://github.com/lukaskaplan/powermeter
+cd powermeter
 chmod a+x ./install.sh
 sudo ./install.sh
 
-sudo systemctl status dc_powermeter.service
+sudo systemctl status powermeter.service
 ```
 # Option 1) Use it as zabbix_agent script
 In this case you don't want to run it as a service and there will not be needed influx and grafana.
 After instalation, stop and disable the dc_powermeter service:
 
 ```
-sudo systemctl stop dc_powermeter.service
-sudo systemctl disable dc_powermeter.service
+sudo systemctl stop powermeter.service
+sudo systemctl disable powermeter.service
 ``` 
 
 Ensure that service is stopped and disabled:
 
 ```
-sudo systemctl status dc_powermeter.service
+sudo systemctl status powermeter.service
 ```
 
 Copy zabbix_agent config and reload zabbix_agent:
@@ -46,14 +48,14 @@ sudo systemctl restart zabbix-agent.service
 Test zabbix_agent userparameter:
 
 ```
-$ sudo zabbix_agentd -t dc_powermeter.current[a]
-dc_powermeter.current[a]                      [t|0.17]
+$ sudo zabbix_agentd -t powermeter.current[a]
+powermeter.current[a]                      [t|0.17]
 
-$ sudo zabbix_agentd -t dc_powermeter.current[b]
-dc_powermeter.current[b]                      [t|0.16]
+$ sudo zabbix_agentd -t powermeter.current[b]
+powermeter.current[b]                      [t|0.16]
 
-$ sudo zabbix_agentd -t dc_powermeter.current[c]
-dc_powermeter.current[c]                      [t|0.0]
+$ sudo zabbix_agentd -t powermeter.current[c]
+powermeter.current[c]                      [t|0.0]
 
 ```
 ### Zabbix item configuration:
@@ -79,7 +81,7 @@ sudo systemctl restart zabbix-agent.service
 Test zabbix_agent userparameter:
 
 ```
-sudo zabbix_agentd -t dc_powermeter.json[/etc/powermeter/powermetter1.conf]
+sudo zabbix_agentd -t powermeter.json[/etc/powermeter/powermetter1.conf]
 
 powermeter.json[/etc/powermeter/powermeter1.conf] [t|{"a": 3.51, "b": 3.77, "c": 1.3, "d": 3.51, "e": 3.88, "f": 1.97, "g": 1.23, "h": 0.0, "i": 1.55, "j": 1.55, "k": 2.02, "l": 4.0, "m": 0.47, "n": 0.0, "o": 4.91, "p": 0.0}]
 ```
@@ -116,9 +118,10 @@ In this case we want to run dc_powermeter as a service, see section "How to inst
 You will need running docker environment
 
 ```
-mkdir /srv/dc_powermeter
-cd /srv/dc_powermeter
+mkdir /srv/powermeter
+cd /srv/powermeter
 git clone https://github.com/lukaskaplan/powermeter
+cd powermeter
 docker-compose up -d
 ```
 
