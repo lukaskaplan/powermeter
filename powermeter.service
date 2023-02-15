@@ -4,7 +4,7 @@ After=network-online.target
 
 [Service]
 WorkingDirectory=/usr/bin
-ExecStart=/usr/bin/python3 /usr/bin/powermeter.py
+ExecStart=/usr/bin/python3 /usr/local/bin/powermeter.py
 #User=
 Restart=always
 
