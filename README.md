@@ -14,8 +14,8 @@ You will need linux server with usb port
 
 ```
 apt update && apt install git
-mkdir dc_powermeter
-cd dc_powermeter
+mkdir powermeter
+cd powermeter
 git clone https://github.com/lukaskaplan/powermeter
 cd powermeter
 chmod a+x ./install.sh
@@ -25,7 +25,7 @@ sudo systemctl status powermeter.service
 ```
 # Option 1) Use it as zabbix_agent script
 In this case you don't want to run it as a service and there will not be needed influx and grafana.
-After instalation, stop and disable the dc_powermeter service:
+After instalation, stop and disable the powermeter service:
 
 ```
 sudo systemctl stop powermeter.service
@@ -113,7 +113,7 @@ Preprocesing:
   - Description: Path to powermeter config file 
   
 # Option 3) How to run Influx and Grafana
-In this case we want to run dc_powermeter as a service, see section "How to install it as a service" above.
+In this case we want to run powermeter as a service, see section "How to install it as a service" above.
 
 You will need running docker environment
 
