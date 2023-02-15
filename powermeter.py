@@ -10,7 +10,7 @@
 ## Author: Lukas Kaplan                                       ##
 ## Email: lukas.kaplan@lkaplan.cz                             ##
 ## License: BSD                                               ##
-## Version: 1.0                                               ##
+## Version: 1.1                                               ##
 ################################################################
 
 import sys
@@ -46,11 +46,13 @@ modbusclient.connect()
 ### INFLUX ###
 # Create the InfluxDB client object
 influxclient = InfluxDBClient(
-    influx["host"], 
-    influx["port"], 
-    influx["user"], 
-    influx["password"],
-    influx["dbname"]
+    host=influx["host"],
+    port=influx["port"],
+    username=influx["user"],
+    password=influx["password"],
+    database=influx["dbname"],
+    ssl=bool(influx["ssl"]),
+    verify_ssl=bool(influx["verify_ssl"])   
 )
 
 ### ONESHOT MODE ###
