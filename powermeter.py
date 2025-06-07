@@ -17,7 +17,7 @@ import sys
 import time # for sleep(interval) 
 import datetime # for influxdb timestamp
 from influxdb import InfluxDBClient
-from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+from pymodbus.client import ModbusSerialClient as ModbusClient
 from configparser import ConfigParser
   
 ### Read the config file ###
@@ -33,7 +33,7 @@ interface = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p"]
 
 ### ModBUS ###
 modbusclient = ModbusClient(
-    method = modbus["method"], 
+    #method = modbus["method"], 
     port = modbus["port"], 
     timeout = int(modbus["timeout"]), 
     stopbits = int(modbus["stopbits"]), 
@@ -58,7 +58,7 @@ influxclient = InfluxDBClient(
 ### ONESHOT MODE ###
 if len(sys.argv) > 1:
 #    if str(sys.argv[1]) == "-oneshot":
-    request = modbusclient.read_holding_registers(address=0,count=56,unit=1)
+    request = modbusclient.read_holding_registers(address=0,count=56,slave=1)
     for i in range(0,len(interface)):
         current = float(ratio[interface[i]]) * request.registers[8+i]
         current = round(current, 2)
@@ -73,7 +73,7 @@ else:
     try:
         while True:
             timestamp=datetime.datetime.utcnow().isoformat()
-            request = modbusclient.read_holding_registers(address=0,count=56,unit=1)
+            request = modbusclient.read_holding_registers(address=0,count=56,slave=1)
             #print(request.registers)
     
             for i in range(0,len(interface)):
