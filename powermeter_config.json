@@ -1,0 +1,57 @@
+
+[
+    {
+        "id": 1,
+        "port": "/dev/ttyUSB0",
+        "timeout": 1,
+        "stopbits": 1,
+        "bytesize": 8,
+        "parity": "N",
+        "baudrate": "9600",
+        "inputs": [
+            {"input": "a", "ratio": 0.01, "name": "Input a"},
+            {"input": "b", "ratio": 0.01, "name": "Input b"},
+            {"input": "c", "ratio": 0.01, "name": "Input c"},
+            {"input": "d", "ratio": 0.01, "name": "Input d"},
+            {"input": "e", "ratio": 0.01, "name": "Input e"},
+            {"input": "f", "ratio": 0.01, "name": "Input f"},
+            {"input": "g", "ratio": 0.01, "name": "Input g"},
+            {"input": "h", "ratio": 0.01, "name": "Input h"},
+            {"input": "i", "ratio": 0.01, "name": "Input i"},
+            {"input": "j", "ratio": 0.01, "name": "Input j"},
+            {"input": "k", "ratio": 0.01, "name": "Input k"},
+            {"input": "l", "ratio": 0.01, "name": "Input l"},
+            {"input": "m", "ratio": 0.01, "name": "Input m"},
+            {"input": "n", "ratio": 0.01, "name": "Input n"},
+            {"input": "o", "ratio": 0.01, "name": "Input o"},
+            {"input": "p", "ratio": 0.01, "name": "Input p"}
+        ]
+    },
+    {
+        "id": 2,
+        "port": "/dev/ttyUSB1",
+        "timeout": 1,
+        "stopbits": 1,
+        "bytesize": 8,
+        "parity": "N",
+        "baudrate": "9600",
+        "inputs": [
+            {"input": "a", "ratio": 0.01, "name": "Input a"},
+            {"input": "b", "ratio": 0.01, "name": "Input b"},
+            {"input": "c", "ratio": 0.01, "name": "Input c"},
+            {"input": "d", "ratio": 0.01, "name": "Input d"},
+            {"input": "e", "ratio": 0.01, "name": "Input e"},
+            {"input": "f", "ratio": 0.01, "name": "Input f"},
+            {"input": "g", "ratio": 0.01, "name": "Input g"},
+            {"input": "h", "ratio": 0.01, "name": "Input h"},
+            {"input": "i", "ratio": 0.01, "name": "Input i"},
+            {"input": "j", "ratio": 0.01, "name": "Input j"},
+            {"input": "k", "ratio": 0.01, "name": "Input k"},
+            {"input": "l", "ratio": 0.01, "name": "Input l"},
+            {"input": "m", "ratio": 0.01, "name": "Input m"},
+            {"input": "n", "ratio": 0.01, "name": "Input n"},
+            {"input": "o", "ratio": 0.01, "name": "Input o"},
+            {"input": "p", "ratio": 0.01, "name": "Input p"}
+        ]
+    }
+]
