@@ -1,8 +1,9 @@
-# Powermeter
+# ⚡ Powermeter
 
 **Powermeter** is a Python package for reading current values from **HDHK devices** (via RS-485 Modbus RTU) and exposing them in structured formats for monitoring and visualization.
 
-## Features
+
+## ✨ Features
 
 - Reads Modbus RTU registers from HDHK devices
 - Support for mutliple HDHK devices (each connected to the separated USB convertor)
@@ -11,57 +12,34 @@
 - Can be run as a service or from CLI
 - Easily extensible and modular
 
-## Usage examples:
 
-- **Datacenter** - You can measure power consumption of each phase/fuse/circuit directly inside electrical switchboard. It will give you information about load balanced over the phases. So you can better balance your load with keep in mind UPS capacity. You can measure and bill power consumption for your customers load. You can detect and alert/prevent overload, etc.
-- **Home** - You can monitor and visualise your power consumption at home.
-- **Camp** - Measurement of power consuption on caravan sites.
-- **Other** - Depends on your needs and fantasy.
+## 💡 Usage examples:
 
-## Data processing:
+- **Datacenter** -> Monitor power consumption of per phase/fuse/circuit in an electrical switchboard. Use data for balance load, prevent overload, enable customer billing etc.
+- **Home** -> Visualise home power consumption.
+- **Camp** -> Measure power consumption on caravan sites.
+- **Other** -> Use your imagination and needs.
 
-- **Zabbix Agent** - "custom values" script using Powermeter package for reading values and provide them for further processing and visualisation in the Zabbix server.
-- **InfluxDB + Grafana** - service using Powermeter package for geting values periodicaly and store them in the InfluxDB. Grafana can be used for visualisation.
-- **Other** - you can yse this package in other Python-based project based on your curent needs.
 
----
+## 🚀 Installation
 
-## Hardware Setup
-
-**Security notice** - HDHK device produced in China. I am not sure if it meet all EU requirements for electronic devices. It should be installed by person who is profesional in electronic installations. It is by its purpose (indirect current measurement) galvanicaly separated from the high voltage circuits.
-
-**HDHK device** 
-- 16x input for AC current measuring transformers
-- powered by 12V DC
-- RS485 modbus rtu
-
-![hdhk - chinese rs485 ampermeter](doc/images/HDHK.jpg)
-
-HDHK Device is powered by 12V DC power supply. Data are read via RS485 bus (modbus-rtu) which is connected by RS485/USB converter to the server (any computer running linux). Software using Powermeter python package can read values from the HDHK devices and provide them for further processing.
-
-Diagram:
-
-![Connection diagram](doc/images/powermeter.svg)
-
----
-
-## Installation
-
-As Pyhon package (prefered way)
+### As Pyhon package (prefered way)
 
 ```bash
+# Git clone
+git clone https://github.com/lukaskaplan/powermeter.git
+cd powermeter
+
 # Create virtualenv
 python3 -m venv /opt/powermeter-venv
 source /opt/powermeter-venv/bin/activate
 
 # Install
 pip install -e .
-
-# To update dependencies
-pip install --upgrade -e
 ```
 
-Configuration
+
+### Configuration
 
 ```bash
 # Copy config file
@@ -72,11 +50,9 @@ cp config/powermeter/powermeter_config.json /etc/powermeter/powermeter_config.js
 nano /etc/powermeter/powermeter_config.json
 ```
 
----
+## 🐍 Basic Usage (Python package)
 
-## Basic Usage (Python Package)
-
-You can use Powermeter directly in your Python code:
+Example usage in Python:
 
 ```python
 from powermeter import get_values
@@ -90,3 +66,20 @@ Run your script:
 ```bash
 /opt/powermeter-venv/bin/python3 <your-script>.py
 ```
+
+
+## 📚 Further Documentation
+
+- [Hardware installation guide](doc/hardware.md)
+- [Zabbix integration guide](doc/zabbix.md)
+- [InfluxDB + Grafana guide](doc/influx_and_grafana.md)
+
+
+## 📄 License
+
+This project is licensed under the MIT License. See LICENSE for details.
+
+
+## 🤝 Contributing
+
+Contributions are welcome! If you have suggestions, issues, or ideas, please open an issue or pull request.
