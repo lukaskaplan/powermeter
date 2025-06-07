@@ -17,7 +17,7 @@ import json
 import sys
 import os.path
 
-from pymodbus.client.sync import ModbusSerialClient as ModbusClient
+from pymodbus.client import ModbusSerialClient as ModbusClient
 from configparser import ConfigParser
   
 ### Read the config file ###
@@ -36,7 +36,7 @@ if len(sys.argv) > 1:
         
         ### ModBUS ###
         modbusclient = ModbusClient(
-            method = modbus["method"], 
+            #method = modbus["method"], 
             port = modbus["port"], 
             timeout = int(modbus["timeout"]), 
             stopbits = int(modbus["stopbits"]), 
@@ -46,7 +46,7 @@ if len(sys.argv) > 1:
         )
         connection = modbusclient.connect()
         
-        request = modbusclient.read_holding_registers(address=8,count=16,unit=1)
+        request = modbusclient.read_holding_registers(address=8,count=16,slave=1)
         
         modbusclient.close()
         
