@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-powermeter_json.py
+scripts/powermeter_json.py
 
 Script to read current values from Modbus devices using powermeter_core.py
 and print them as JSON to stdout.
