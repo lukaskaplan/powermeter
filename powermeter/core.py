@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-powermeter_core.py
+powermeter/core.py
 
 Core module for Powermeter.
 
