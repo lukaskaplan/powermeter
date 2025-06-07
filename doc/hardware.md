@@ -1,4 +1,4 @@
-# 🛠️ Hardware Installation
+# 🛠️ Hardware Installation Guide
 
 ## ⚠️ Safety Notice
 
