@@ -1,167 +1,92 @@
-# powermeter
+# Powermeter
 
-This project is cheap solution for measuring of AC current on up to 16 phases. It is based on chinese device labeled "HDHK", which has 16 inputs for measuring transformers.
+**Powermeter** is a Python package for reading current values from **HDHK devices** (via RS-485 Modbus RTU) and exposing them in structured formats for monitoring and visualization.
 
-This Device is powered by 12V DC power supply. Data are read via RS485 bus (modbus-rtu) which is connected to PC by RS485/USB converter. On the computer, there is running debian 10 with simple python script. Python script reds data from "HDHK" and sends them to remote InfluxDB. Then we can visualise them by Grafana.
+## Features
 
-![hdhk - chinese rs485 ampermeter](https://github.com/lukaskaplan/powermeter/blob/master/images/HDHK.jpg) 
+- Reads Modbus RTU registers from HDHK devices
+- Support for mutliple HDHK devices (each connected to the separated USB convertor)
+- Provides easy-to-use API in Python (`get_values()`)
+- Outputs JSON for use in Zabbix, InfluxDB, or other monitoring systems
+- Can be run as a service or from CLI
+- Easily extensible and modular
 
-# Connection diagram
-![Connection diagram](https://github.com/lukaskaplan/powermeter/blob/master/powermeter.svg)
+## Usage examples:
 
+- **Datacenter** - You can measure power consumption of each phase/fuse/circuit directly inside electrical switchboard. It will give you information about load balanced over the phases. So you can better balance your load with keep in mind UPS capacity. You can measure and bill power consumption for your customers load. You can detect and alert/prevent overload, etc.
+- **Home** - You can monitor and visualise your power consumption at home.
+- **Camp** - Measurement of power consuption on caravan sites.
+- **Other** - Depends on your needs and fantasy.
 
+## Data processing:
 
+- **Zabbix Agent** - "custom values" script using Powermeter package for reading values and provide them for further processing and visualisation in the Zabbix server.
+- **InfluxDB + Grafana** - service using Powermeter package for geting values periodicaly and store them in the InfluxDB. Grafana can be used for visualisation.
+- **Other** - you can yse this package in other Python-based project based on your curent needs.
 
+---
 
+## Hardware Setup
 
+**Security notice** - HDHK device produced in China. I am not sure if it meet all EU requirements for electronic devices. It should be installed by person who is profesional in electronic installations. It is by its purpose (indirect current measurement) galvanicaly separated from the high voltage circuits.
 
+**HDHK device** 
+- 16x input for AC current measuring transformers
+- powered by 12V DC
+- RS485 modbus rtu
 
+![hdhk - chinese rs485 ampermeter](doc/images/HDHK.jpg)
 
+HDHK Device is powered by 12V DC power supply. Data are read via RS485 bus (modbus-rtu) which is connected by RS485/USB converter to the server (any computer running linux). Software using Powermeter python package can read values from the HDHK devices and provide them for further processing.
 
+Diagram:
 
+![Connection diagram](doc/images/powermeter.svg)
 
+---
 
+## Installation
 
+As Pyhon package (prefered way)
 
+```bash
+# Create virtualenv
+python3 -m venv /opt/powermeter-venv
+source /opt/powermeter-venv/bin/activate
 
+# Install
+pip install -e .
 
-
-
-
-# How to install it as a service
-You will need linux server with usb port
-
-```
-apt update && apt install git
-mkdir powermeter
-cd powermeter
-git clone https://github.com/lukaskaplan/powermeter
-cd powermeter
-chmod a+x ./install.sh
-sudo ./install.sh
-
-sudo systemctl status powermeter.service
-```
-# Option 1) Use it as zabbix_agent script
-In this case you don't want to run it as a service and there will not be needed influx and grafana.
-After instalation, stop and disable the powermeter service:
-
-```
-sudo systemctl stop powermeter.service
-sudo systemctl disable powermeter.service
-``` 
-
-Ensure that service is stopped and disabled:
-
-```
-sudo systemctl status powermeter.service
-```
-
-Copy zabbix_agent config and reload zabbix_agent:
-
-```
-sudo cp ./zabbix_agentd.conf.d/userparameter-powermetter.conf /etc/zabbix/zabbix_agentd.conf.d/
-sudo systemctl restart zabbix-agent.service
+# To update dependencies
+pip install --upgrade -e
 ```
 
-Test zabbix_agent userparameter:
+Configuration
 
-```
-$ sudo zabbix_agentd -t powermeter.current[a]
-powermeter.current[a]                      [t|0.17]
+```bash
+# Copy config file
+mkdir -p /etc/powermeter
+cp config/powermeter/powermeter_config.json /etc/powermeter/powermeter_config.json
 
-$ sudo zabbix_agentd -t powermeter.current[b]
-powermeter.current[b]                      [t|0.16]
-
-$ sudo zabbix_agentd -t powermeter.current[c]
-powermeter.current[c]                      [t|0.0]
-
-```
-### Zabbix item configuration:
-
- - Name: powermeter_current_A
- - Type: Zabbix agent
- - Key: powermeter.current[a]
- - Host interface: <IP address of your host>
- - Type: Numeric(float)
- - Units: A
-
-
-  
- # Option 2) Use it as zabbix_agent script with json
- 
-Copy zabbix_agent config and reload zabbix_agent:
-
-```
-sudo cp ./zabbix_agentd.conf.d/userparameter-powermetter.conf /etc/zabbix/zabbix_agentd.conf.d/
-sudo systemctl restart zabbix-agent.service
+# Edit config file
+nano /etc/powermeter/powermeter_config.json
 ```
 
-Test zabbix_agent userparameter:
+---
 
-```
-sudo zabbix_agentd -t powermeter.json[/etc/powermeter/powermetter1.conf]
+## Basic Usage (Python Package)
 
-powermeter.json[/etc/powermeter/powermeter1.conf] [t|{"a": 3.51, "b": 3.77, "c": 1.3, "d": 3.51, "e": 3.88, "f": 1.97, "g": 1.23, "h": 0.0, "i": 1.55, "j": 1.55, "k": 2.02, "l": 4.0, "m": 0.47, "n": 0.0, "o": 4.91, "p": 0.0}]
-```
-### Zabbix item configuration (in template):
+You can use Powermeter directly in your Python code:
 
- - Name: powermeter
- - Type: Zabbix agent
- - Key: powermeter.json[{$PATH}]
- - Type of information: Text
-  
-### Zabbix dependent item (in template):
+```python
+from powermeter import get_values
 
-Item:
-  - Name: Circuit 1
-  - Type: Dependent item
-  - Key: 1a
-  - Master item: Template powermeter: powermeter
-  - Type of information: Nuimeric (float)
-  - Units: A
-  
-Preprocesing:
-  - Name: JSONPath
-  - Parameters: $.a
- 
- ### Zabbix Host Macros
- Macro:
-  - Macro: {$PATH}
-  - Value: /etc/powermeter/powermeter1.conf
-  - Description: Path to powermeter config file 
-  
-# Option 3) How to run Influx and Grafana
-In this case we want to run powermeter as a service, see section "How to install it as a service" above.
-
-You will need running docker environment
-
-```
-mkdir /srv/powermeter
-cd /srv/powermeter
-git clone https://github.com/lukaskaplan/powermeter
-cd powermeter
-docker-compose up -d
+values = get_values('/etc/powermeter/powermeter_config.json')
+print(values)
 ```
 
-### Test Influxdb:
+Run your script:
 
-**http://<yourserver_ip>:8086/query**
-
-Cancel authentication and then you should get `"unable to parse authentication credentials"`. Or you can add credentials and after successful login, you shoud get `"missing required parameter \"q\""`
-
-
-### Test Grafana:
-
-**http://<yourserver_ip>:3000**
-
-You should see login page. Default username and password is admin / admin.
-
-Then you can import dashboards from this repo. You can see them below:
-
-![Grafana owerview dashboard screenshot](https://github.com/lukaskaplan/powermeter/blob/master/images/screenshot1.png)
-
-![Grafana history dashboard screenshot](https://github.com/lukaskaplan/powermeter/blob/master/images/screenshot2.png)
-
-
-
+```bash
+/opt/powermeter-venv/bin/python3 <your-script>.py
+```
