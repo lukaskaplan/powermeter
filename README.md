@@ -44,10 +44,10 @@ pip install -e .
 ```bash
 # Copy config file
 mkdir -p /etc/powermeter
-cp config/powermeter/powermeter_config.json /etc/powermeter/powermeter_config.json
+cp config/powermeter/powermeter.json /etc/powermeter/
 
 # Edit config file
-nano /etc/powermeter/powermeter_config.json
+nano /etc/powermeter/powermeter.json
 ```
 
 ## 🐍 Basic Usage (Python package)
@@ -57,7 +57,7 @@ Example usage in Python:
 ```python
 from powermeter import get_values
 
-values = get_values('/etc/powermeter/powermeter_config.json')
+values = get_values('/etc/powermeter/powermeter.json')
 print(values)
 ```
 
