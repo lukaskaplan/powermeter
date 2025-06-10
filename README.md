@@ -2,6 +2,8 @@
 
 **Powermeter** is a Python package for reading current values from **HDHK devices** (via RS-485 Modbus RTU) and exposing them in structured formats for monitoring and visualization.
 
+![Gauges](doc/images/banner.png)
+
 
 ## ✨ Features
 
