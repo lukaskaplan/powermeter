@@ -1,76 +1,184 @@
+# 📊 InfluxDB and Grafana Integration Guide
 
-# How to install it as a service
-You will need linux server with usb port
+ Assuming you have the hardware installed and configured as described in the [Hardware Installation Guide](hardware.md)
 
-```
-apt update && apt install git
-mkdir powermeter
-cd powermeter
+## ⚙️ Create Powermeter service
+
+Run following commands as **root**:
+
+```bash
+# Install git and clone repository
+apt update 
+apt install -y git python3-venv python3-pip
+
 git clone https://github.com/lukaskaplan/powermeter
 cd powermeter
-chmod a+x ./install.sh
-sudo ./install.sh
 
-sudo systemctl status powermeter.service
+# Create python virtualenv
+python3 -m venv /opt/powermeter-venv
+source /opt/powermeter-venv/bin/activate
+
+# Install package
+pip3 install -e .
+pip3 install influxdb_client
+
+# Create config dir and copy config files
+mkdir -p /etc/powermeter
+cp config/powermeter/* /etc/powermeter
+
+# Modify config files
+nano /etc/powermeter/influx.conf
+nano /etc/powermeter/powermeter.json
+
+# Prepare powermeter service
+cp scripts/powermeter_influx.py /usr/local/bin/
+chmod +x /usr/local/bin/powermeter_influx.py
+cp config/systemd/powermeter.service /etc/systemd/system/powermeter.service
+
+# Reload systemd units
+systemctl daemon-reload
+
+# Enable service to start at boot
+systemctl enable powermeter.service
+
+# Start service
+systemctl start powermeter.service
+
+# Check status
+systemctl status powermeter.service
+
+# Check logs
+journalctl -u powermeter.service -f 
 ```
+
+## 🚀 Deploy InfluxDB + Grafana
 
 Example of docker-compose.yml for InfluxDB and Grafana:
 
 ```yml
 services:
   influx:
-    image: influxdb:1.8
+    image: influxdb:2.7
     restart: always
     volumes:
-      - influxdb:/var/lib/influxdb
+      - influx_data:/var/lib/influxdb
+      - influx_config:/etc/influxdb2
     ports:
       - 8086:8086
-    environment:
-      INFLUXDB_DB: powermeter
-      INFLUXDB_HTTP_AUTH_ENABLED: 'True'
-      INFLUXDB_ADMIN_USER: admin
-      INFLUXDB_ADMIN_PASSWORD: admin
-      INFLUXDB_USER: user
-      INFLUXDB_USER_PASSWORD: user
-  
+
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:12.0.1
     restart: always
+    volumes:
+      - grafana:/var/lib/grafana
     ports:
       - 3000:3000
+
+volumes:
+  influx_data:
+  influx_config:
+  grafana:
 ```
 
+Run it:
 
-# Option 3) How to run Influx and Grafana
-In this case we want to run powermeter as a service, see section "How to install it as a service" above.
-
-You will need running docker environment
-
-```
-mkdir /srv/powermeter
-cd /srv/powermeter
-git clone https://github.com/lukaskaplan/powermeter
-cd powermeter
-docker-compose up -d
+```bash
+nano docker-compose.yml
+docker compose up -d
 ```
 
-### Test Influxdb:
+## 🛠️ Configure InfluxDB
 
-**http://<yourserver_ip>:8086/query**
+### 1. Open the InfluxDB web GUI.
 
-Cancel authentication and then you should get `"unable to parse authentication credentials"`. Or you can add credentials and after successful login, you shoud get `"missing required parameter \"q\""`
+### 2. Configure admin / password, Organization name and Bucket name.
+
+![](images/influx-1.png)
+
+### 3. Click on "CONFIGURE LATER".
+
+![](images/influx-2.png)
+
+### 4. Go to "API tokens".
+
+![](images/influx-3.png)
+
+### 5. Create "Custom API token".
+
+![](images/influx-4.png)
+
+### 6. Set Description and Read/Write permissions for "powermeter" bucket.
+
+![](images/influx-5.png)
+
+### 7. Copy generated API token and put it in the `/etc/powermeter/influx.conf` file. And restart powermeter service `systemctl restart powermeter.service`.
+
+![](images/influx-6.png)
+
+### 8. Go to "Data explorer" and configure folowing query. When you clic on submit. you should see first data in the graph.
+
+![](images/influx-7.png)
+
+## 🎨 Configure Grafana and InfluxDB connection
+
+Before configuration of Grafana, be sure you have prepared InfluxDB API Token, Organization name and Bucket name
+
+InfluxDB API Token can be same as for powemeter. But I recommmend to create separated token for Grafana.
+
+### 1. Login to Grafana
+
+Default username and password: `admin` / `admin`
+
+![Grafana screenshot no. 1](images/grafana-1.png)
+
+### 2. Configure new admin password
+
+![Grafana screenshot no. 2](images/grafana-2.png)
+
+### 3. go to "Data sources"
+
+![Grafana screenshot no. 3](images/grafana-3.png)
+
+### 4. "Add data source"
+
+![Grafana screenshot no. 4](images/grafana-4.png)
+
+### 5. Add InfluxDB data source
+
+Tip: use search field
+
+![Grafana screenshot no. 5](images/grafana-5.png)
+
+### 6. Configure InfluxDB connection (part 1)
+
+- Configure name of the connection
+- Select `InfluxQL` Query language
+- Fill in URL of the InfluxDB server
+
+and scroll down
+
+![Grafana screenshot no. 6](images/grafana-6.png)
+
+### 7. Configure InfluxDB connection (part 2)
+
+- Find section "Custom HTTP headers".
+- Click "+ Add header"
+- Fill in:
+  - Header: Authorization
+  - Value: Token <influxdb-api-token>
+- Set database name (powermeter)
+- Click "Save and Test"
+
+![Grafana screenshot no. 7](images/grafana-7.png)
+
+### 8. InfluxDB connection is working
+
+![Grafana screenshot no. 8](images/grafana-8.png)
 
 
-### Test Grafana:
 
-**http://<yourserver_ip>:3000**
+## Create Grafana dashboard
 
-You should see login page. Default username and password is admin / admin.
 
-Then you can import dashboards from this repo. You can see them below:
-
-![Grafana owerview dashboard screenshot](https://github.com/lukaskaplan/powermeter/blob/master/images/screenshot1.png)
-
-![Grafana history dashboard screenshot](https://github.com/lukaskaplan/powermeter/blob/master/images/screenshot2.png)
 
 
