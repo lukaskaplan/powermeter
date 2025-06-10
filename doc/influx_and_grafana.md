@@ -122,7 +122,6 @@ docker compose up -d
 
 ![](images/influx-7.png)
 
----
 
 ## 🔗 Configure Grafana and InfluxDB connection
 
