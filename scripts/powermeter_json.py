@@ -14,7 +14,7 @@ import json
 import sys
 from powermeter import get_values
 
-CONFIG_PATH = '/etc/powermeter/powermeter_config.json'
+CONFIG_PATH = '/etc/powermeter/powermeter.json'
 
 if len(sys.argv) > 1:
     CONFIG_PATH = sys.argv[1]
