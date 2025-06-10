@@ -3,10 +3,10 @@ Description=Powermeter service
 After=network-online.target
 
 [Service]
-WorkingDirectory=/usr/bin
-ExecStart=/usr/bin/python3 /usr/local/bin/powermeter.py
-#User=
-Restart=always
+WorkingDirectory=/usr/local/bin
+ExecStart=/opt/powermeter-venv/bin/python3 /usr/local/bin/powermeter_influx.py
+#User=root
+Restart=no
 
 [Install]
 WantedBy=multi-user.target
