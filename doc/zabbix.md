@@ -1,3 +1,8 @@
+# Zabbix Integration Guide
+
+
+
+
  # Option 2) Use it as zabbix_agent script with json
  
 Copy zabbix_agent config and reload zabbix_agent:
@@ -46,7 +51,7 @@ Preprocesing:
 ## How to test it
 
 ```bash
-python3 scripts/powermeter_json.py config/powermeter/powermeter_config.json 2>&1
+python3 scripts/powermeter_json.py config/powermeter/powermeter.json 2>&1
 
 [Errno 2] could not open port /dev/ttyUSB1: [Errno 2] No such file or directory: '/dev/ttyUSB1'
 WARNING:root:Device ID 2 on port /dev/ttyUSB1 - connection failed!
