@@ -1,10 +1,11 @@
-# 📊 InfluxDB and Grafana Integration Guide
+# 🧩 Setting Up InfluxDB and Grafana for Powermeter
 
- Assuming you have the hardware installed and configured as described in the [Hardware Installation Guide](hardware.md)
+Ensure your hardware is already installed and configured as described in the [Hardware Installation Guide](hardware.md)
 
-## ⚙️ Create Powermeter service
 
-Run following commands as **root**:
+## ⚙️ Install and Configure Powermeter service
+
+Run the following commands as **root**:
 
 ```bash
 # Install git and clone repository
@@ -51,14 +52,15 @@ systemctl status powermeter.service
 journalctl -u powermeter.service -f 
 ```
 
+
 ## 🚀 Deploy InfluxDB + Grafana
 
-Example of docker-compose.yml for InfluxDB and Grafana:
+ Here is an example docker-compose.yml configuration for deploying InfluxDB and Grafana:
 
 ```yml
 services:
   influx:
-    image: influxdb:2.7
+    image: influxdb:2.8
     restart: always
     volumes:
       - influx_data:/var/lib/influxdb
@@ -80,12 +82,13 @@ volumes:
   grafana:
 ```
 
-Run it:
+To start the containers:
 
 ```bash
 nano docker-compose.yml
 docker compose up -d
 ```
+
 
 ## 🛠️ Configure InfluxDB
 
@@ -115,15 +118,17 @@ docker compose up -d
 
 ![](images/influx-6.png)
 
-### 8. Go to "Data explorer" and configure folowing query. When you clic on submit. you should see first data in the graph.
+### 8. Go to "Data explorer" and configure the following query. When you click on Submit, you should see the first data points appear on the graph.
 
 ![](images/influx-7.png)
 
-## 🎨 Configure Grafana and InfluxDB connection
+---
+
+## 🔗 Configure Grafana and InfluxDB connection
 
 Before configuration of Grafana, be sure you have prepared InfluxDB API Token, Organization name and Bucket name
 
-InfluxDB API Token can be same as for powemeter. But I recommmend to create separated token for Grafana.
+InfluxDB API Token can be same as for powemeter. However, it is recommended to create a separate token specifically for Grafana.
 
 ### 1. Login to Grafana
 
@@ -145,7 +150,7 @@ Default username and password: `admin` / `admin`
 
 ### 5. Add InfluxDB data source
 
-Tip: use search field
+💡 Tip: Use the search bar to quickly find InfluxDB.
 
 ![Grafana screenshot no. 5](images/grafana-5.png)
 
@@ -176,9 +181,25 @@ and scroll down
 ![Grafana screenshot no. 8](images/grafana-8.png)
 
 
+## 📊 Create Grafana Dashboard
 
-## Create Grafana dashboard
+### 1. Create dashboard
 
+![Grafana screenshot no. 9](images/grafana-9.png)
+
+### 2. Add visualisation
+
+![Grafana screenshot no. 10](images/grafana-10.png)
+
+### 3. Select data source (influxdb)
+
+![Grafana screenshot no. 11](images/grafana-11.png)
+
+### 4. Configure query and set Visualisation type "Gauge"
+
+Then configure the visualization appearance – set the title, units, minimum/maximum values, thresholds, and more.
+
+![Grafana screenshot no. 12](images/grafana-12.png)
 
 
 
