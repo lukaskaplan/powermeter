@@ -197,9 +197,7 @@ and scroll down
 
 ### 4. Configure query and set Visualisation type "Gauge"
 
-Then configure the visualization appearance – set the title, units, minimum/maximum values, thresholds, and more.
+- Then configure the visualization appearance – set the title, units, minimum/maximum values, thresholds, and more.
+- Example dashboard: [powermeter.json](../config/grafana-dashboards/powermeter.json)
 
 ![Grafana screenshot no. 12](images/grafana-12.png)
-
-
-
