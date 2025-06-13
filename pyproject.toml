@@ -9,7 +9,8 @@ license = { text = "MIT" }
 requires-python = ">=3.8"
 
 dependencies = [
-    "pymodbus[serial]>=3.8",
+    "pymodbus[serial]>=3.7; python_version < '3.9'",
+    "pymodbus[serial]>=3.8; python_version >= '3.9'"
 ]
 
 [tool.setuptools.packages.find]
