@@ -4,10 +4,16 @@
 """
 scripts/powermeter_json.py
 
-Script to read current values from Modbus devices using powermeter_core.py
-and print them as JSON to stdout.
+This script reads current values from Modbus devices using powermeter python package
+and prints the results as formated JSON to stdout.
 
-(Typically used for Zabbix UserParameter or manual testing.)
+Usage:
+    ./powermeter_json.py [config_file]
+
+If a config file path is provided as an argument, it will be used.
+Otherwise, the default path '/etc/powermeter/powermeter.json' is used.
+
+This is typically used for Zabbix UserParameter integration or manual testing.
 """
 
 import json
