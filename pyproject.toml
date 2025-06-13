@@ -6,11 +6,10 @@ authors = [
     { name="Lukas Kaplan", email="lukas.kaplan@lkaplan.cz" }
 ]
 license = { text = "MIT" }
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 
 dependencies = [
-    "pymodbus[serial]>=3.7; python_version < '3.9'",
-    "pymodbus[serial]>=3.8; python_version >= '3.9'"
+    "pymodbus[serial]>=3.8",
 ]
 
 [tool.setuptools.packages.find]
