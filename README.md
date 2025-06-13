@@ -1,5 +1,7 @@
 # ⚡ Powermeter
 
+[![Lint](https://github.com/lukaskaplan/powermeter/actions/workflows/ci.yml/badge.svg)](https://github.com/lukaskaplan/powermeter/actions/workflows/ci.yml)
+
 **Powermeter** is a Python package for reading current values from **HDHK devices** (via RS-485 Modbus RTU) and exposing them in structured formats for monitoring and visualization.
 
 ![Gauges](doc/images/banner.png)
