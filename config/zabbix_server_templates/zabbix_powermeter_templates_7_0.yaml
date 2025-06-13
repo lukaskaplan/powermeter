@@ -1,0 +1,119 @@
+zabbix_export:
+  version: '7.0'
+  template_groups:
+    - uuid: 3dcd5bbe90534f9e8eb5c2d53756af63
+      name: Templates/Power
+  templates:
+    - uuid: b4c1b0b8a6074b878c16609cf01b46ea
+      template: 'Powermeter by Zabbix agent'
+      name: 'Powermeter by Zabbix agent'
+      description: 'Template for bulk read of multiple powermeters on one host.'
+      groups:
+        - name: Templates/Power
+      items:
+        - uuid: 669ec8376112403d94a6f20ab7dea4d0
+          name: json
+          key: powermeter.json
+          delay: 10s
+          value_type: TEXT
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[*]'
+      discovery_rules:
+        - uuid: 016766c6f2aa444da26fbdb9220d965c
+          name: inputs
+          type: DEPENDENT
+          key: powermeter.inputs
+          delay: '0'
+          lifetime: 30d
+          enabled_lifetime_type: DISABLE_NEVER
+          item_prototypes:
+            - uuid: bc7d5470ad9b4d55addc1821564bb4fc
+              name: '{#NAME}'
+              type: DEPENDENT
+              key: 'powermeter[{#ID}]'
+              delay: '0'
+              value_type: FLOAT
+              units: A
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$..[?(@.id == "{#ID}")].current'
+                - type: RTRIM
+                  parameters:
+                    - ']'
+                - type: LTRIM
+                  parameters:
+                    - '['
+              master_item:
+                key: powermeter.json
+          master_item:
+            key: powermeter.json
+          lld_macro_paths:
+            - lld_macro: '{#DEVICE_ID}'
+              path: $.device_id
+            - lld_macro: '{#ID}'
+              path: $.id
+            - lld_macro: '{#INPUT}'
+              path: $.input
+            - lld_macro: '{#NAME}'
+              path: $.name
+    - uuid: c00d71a2f582454cbd0a44724963bb55
+      template: 'Powermeter by Zabbix agent active'
+      name: 'Powermeter by Zabbix agent active'
+      description: 'Template for bulk read of multiple powermeters on one host.'
+      groups:
+        - name: Templates/Power
+      items:
+        - uuid: e3ad04f273774d98803f799050af1a35
+          name: json
+          type: ZABBIX_ACTIVE
+          key: powermeter.json
+          delay: 10s
+          value_type: TEXT
+          trends: '0'
+          preprocessing:
+            - type: JSONPATH
+              parameters:
+                - '$[*]'
+      discovery_rules:
+        - uuid: f157a5103534463f83a1a9852502a91f
+          name: inputs
+          type: DEPENDENT
+          key: powermeter.inputs
+          delay: '0'
+          lifetime: 30d
+          enabled_lifetime_type: DISABLE_NEVER
+          item_prototypes:
+            - uuid: 127c819df42c4e1da2a98ddfe8ab344a
+              name: '{#NAME}'
+              type: DEPENDENT
+              key: 'powermeter[{#ID}]'
+              delay: '0'
+              value_type: FLOAT
+              units: A
+              preprocessing:
+                - type: JSONPATH
+                  parameters:
+                    - '$..[?(@.id == "{#ID}")].current'
+                - type: RTRIM
+                  parameters:
+                    - ']'
+                - type: LTRIM
+                  parameters:
+                    - '['
+              master_item:
+                key: powermeter.json
+          master_item:
+            key: powermeter.json
+          lld_macro_paths:
+            - lld_macro: '{#DEVICE_ID}'
+              path: $.device_id
+            - lld_macro: '{#ID}'
+              path: $.id
+            - lld_macro: '{#INPUT}'
+              path: $.input
+            - lld_macro: '{#NAME}'
+              path: $.name
